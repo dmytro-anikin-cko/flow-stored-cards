@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payment Failed</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body class="bg-gradient-to-br from-red-50 to-red-100 min-h-screen flex items-center justify-center">
+    <div class="container max-w-2xl mx-auto p-8">
+      <div class="bg-white rounded-2xl shadow-2xl p-12 text-center">
+        <!-- Failure Icon -->
+        <div class="mb-6">
+          <div class="w-24 h-24 bg-red-100 rounded-full mx-auto flex items-center justify-center">
+            <svg class="w-12 h-12 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Failure Message -->
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">
+          Payment Failed
+        </h1>
+        <p class="text-lg text-gray-600 mb-8">
+          We couldn't process your payment. This could be due to insufficient funds, an incorrect card number, or other issues.
+        </p>
+
+        <!-- Session ID Display -->
+        <div class="bg-gray-50 rounded-lg p-4 mb-8">
+          <p class="text-sm text-gray-500 mb-2">Session ID:</p>
+          <p id="session-id" class="text-sm font-mono text-gray-700 break-all">
+            Loading...
+          </p>
+        </div>
+
+        <!-- Common Reasons -->
+        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-left">
+          <h3 class="text-sm font-semibold text-yellow-800 mb-2">Common reasons for payment failure:</h3>
+          <ul class="text-sm text-yellow-700 space-y-1 list-disc list-inside">
+            <li>Insufficient funds in your account</li>
+            <li>Incorrect card details</li>
+            <li>Card expired or blocked</li>
+            <li>3D Secure authentication failed</li>
+            <li>Transaction declined by your bank</li>
+          </ul>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a
+            href="/"
+            class="px-8 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-semibold shadow-md hover:shadow-lg"
+          >
+            Try Again
+          </a>
+        </div>
+
+        <!-- Support Info -->
+        <div class="mt-8 pt-8 border-t border-gray-200">
+          <p class="text-sm text-gray-500">
+            If you continue to experience issues, please contact your bank or our support team.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Extract session ID from URL if available
+      const urlParams = new URLSearchParams(window.location.search);
+      const sessionId = urlParams.get('cko-session-id') || 'Not available';
+      document.getElementById('session-id').textContent = sessionId;
+    </script>
+  </body>
+</html>

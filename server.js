@@ -13,6 +13,12 @@ app.use(express.json());
 // API route
 app.post("/api/get-payment-session", async (req, res) => {
   try {
+    const { email } = req.body;
+    
+    if (!email) {
+      return res.status(400).json({ error: "Email is required" });
+    }
+
     const sessionReq = {
       processing_channel_id: "pc_w2njpb6jbjjujgcz5dgzxdn5mm",
       currency: "EUR",
@@ -28,7 +34,7 @@ app.post("/api/get-payment-session", async (req, res) => {
       },
       customer: {
         // name: "Random Name",
-        email: "dima123@email.com",
+        email: email,
         // id: "cus_223w7iymefoujpwu4wgktb4hwe"
       },
       // enabled_payment_methods: ["card"],
@@ -46,8 +52,8 @@ app.post("/api/get-payment-session", async (req, res) => {
           customer_id: "cus_223w7iymefoujpwu4wgktb4hwe",
         },
       },
-      success_url: "https://checkout.checkout.test.success",
-      failure_url: "https://checkout.checkout.test.failure",
+      success_url: `http://localhost:${PORT}/success.html`,
+      failure_url: `http://localhost:${PORT}/failure.html`,
     };
 
     const ckoRes = await fetch(

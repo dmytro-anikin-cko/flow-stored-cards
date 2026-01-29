@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payment Successful</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body class="bg-gradient-to-br from-green-50 to-green-100 min-h-screen flex items-center justify-center">
+    <div class="container max-w-2xl mx-auto p-8">
+      <div class="bg-white rounded-2xl shadow-2xl p-12 text-center">
+        <!-- Success Icon -->
+        <div class="mb-6">
+          <div class="w-24 h-24 bg-green-100 rounded-full mx-auto flex items-center justify-center">
+            <svg class="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Success Message -->
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">
+          Payment Successful!
+        </h1>
+        <p class="text-lg text-gray-600 mb-8">
+          Thank you for your payment. Your transaction has been completed successfully.
+        </p>
+
+        <!-- Session ID Display -->
+        <div class="bg-gray-50 rounded-lg p-4 mb-8">
+          <p class="text-sm text-gray-500 mb-2">Session ID:</p>
+          <p id="session-id" class="text-sm font-mono text-gray-700 break-all">
+            Loading...
+          </p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a
+            href="/"
+            class="px-8 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-semibold shadow-md hover:shadow-lg"
+          >
+            Create Another Payment
+          </a>
+        </div>
+
+        <!-- Additional Info -->
+        <div class="mt-8 pt-8 border-t border-gray-200">
+          <p class="text-sm text-gray-500">
+            A confirmation email has been sent to your registered email address.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Extract session ID from URL if available
+      const urlParams = new URLSearchParams(window.location.search);
+      const sessionId = urlParams.get('cko-session-id') || 'Not available';
+      document.getElementById('session-id').textContent = sessionId;
+    </script>
+  </body>
+</html>
