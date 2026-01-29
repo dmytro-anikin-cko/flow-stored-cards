@@ -46,7 +46,7 @@ const loadCustomers = () => {
   
   customers.forEach(customer => {
     const customerCard = document.createElement('div');
-    customerCard.className = 'bg-white p-4 rounded-lg border border-gray-200 hover:border-blue-400 transition-colors cursor-pointer flex justify-between items-center';
+    customerCard.className = 'bg-white p-4 rounded-lg border border-gray-200 hover:border-blue-400 transition-colors flex justify-between items-center';
     
     customerCard.innerHTML = `
       <div class="flex-1">
@@ -54,7 +54,7 @@ const loadCustomers = () => {
         <div class="text-xs text-gray-500 font-mono mt-1">ID: ${customer.id}</div>
         <div class="text-xs text-gray-400 mt-1">Last used: ${new Date(customer.lastUsed).toLocaleString()}</div>
       </div>
-      <button class="use-customer-btn px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors">
+      <button class="use-customer-btn px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors cursor-pointer">
         Use Customer
       </button>
     `;
