@@ -10,14 +10,55 @@ const PORT = 3000;
 app.use(express.static(path.join(__dirname, "public"))); // Serve index.html & script.js
 app.use(express.json());
 
-// API route
+// API route to get payment details
+app.get("/api/payment-details", async (req, res) => {
+  try {
+    const { paymentId } = req.query;
+
+    if (!paymentId) {
+      return res.status(400).json({ error: "Payment ID is required" });
+    }
+
+    const ckoRes = await fetch(
+      `https://api.sandbox.checkout.com/payments/${paymentId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${process.env.CKO_SECRET_KEY}`,
+        },
+      }
+    );
+
+    const paymentDetails = await ckoRes.json();
+
+    if (!ckoRes.ok) {
+      return res.status(ckoRes.status).json(paymentDetails);
+    }
+
+    // Return safe data to frontend
+    res.status(200).json({
+      customerId: paymentDetails.customer?.id,
+      email: paymentDetails.customer?.email,
+      paymentId: paymentDetails.id,
+      amount: paymentDetails.amount,
+      currency: paymentDetails.currency,
+    });
+  } catch (err) {
+    console.error("Error fetching payment details:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// API route to create payment session
 app.post("/api/get-payment-session", async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email, customerId } = req.body;
     
     if (!email) {
       return res.status(400).json({ error: "Email is required" });
     }
+
+    console.log(`Creating payment session for: ${email}${customerId ? ` (Customer ID: ${customerId})` : ' (New customer)'}`);
 
     const sessionReq = {
       processing_channel_id: "pc_w2njpb6jbjjujgcz5dgzxdn5mm",
@@ -33,9 +74,8 @@ app.post("/api/get-payment-session", async (req, res) => {
         },
       },
       customer: {
-        // name: "Random Name",
         email: email,
-        // id: "cus_223w7iymefoujpwu4wgktb4hwe"
+        ...(customerId && { id: customerId }),
       },
       // enabled_payment_methods: ["card"],
       disabled_payment_methods: ["remember_me"],
@@ -48,9 +88,11 @@ app.post("/api/get-payment-session", async (req, res) => {
            */
           store_payment_details: "collect_consent",
         },
-        stored_card: {
-          customer_id: "cus_223w7iymefoujpwu4wgktb4hwe",
-        },
+        ...(customerId && {
+          stored_card: {
+            customer_id: customerId,
+          },
+        }),
       },
       success_url: `http://localhost:${PORT}/success.html`,
       failure_url: `http://localhost:${PORT}/failure.html`,
