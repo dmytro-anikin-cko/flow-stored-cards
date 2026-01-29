@@ -60,6 +60,11 @@ app.post("/api/get-payment-session", async (req, res) => {
 
     console.log(`Creating payment session for: ${email}${customerId ? ` (Customer ID: ${customerId})` : ' (New customer)'}`);
 
+    // Construct base URL dynamically based on the request
+    const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'http';
+    const host = req.headers['x-forwarded-host'] || req.headers.host || `localhost:${PORT}`;
+    const baseUrl = `${protocol}://${host}`;
+
     const sessionReq = {
       processing_channel_id: "pc_w2njpb6jbjjujgcz5dgzxdn5mm",
       currency: "EUR",
@@ -93,8 +98,8 @@ app.post("/api/get-payment-session", async (req, res) => {
           },
         }),
       },
-      success_url: `http://localhost:${PORT}/success.html`,
-      failure_url: `http://localhost:${PORT}/failure.html`,
+      success_url: `${baseUrl}/success.html`,
+      failure_url: `${baseUrl}/failure.html`,
     };
 
     const ckoRes = await fetch(
