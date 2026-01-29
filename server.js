@@ -82,11 +82,10 @@ app.post("/api/get-payment-session", async (req, res) => {
       payment_method_configuration: {
         card: {
           /**
-           * This value displays the option to store card credentials for future payments.
-           * If you have already collected consent from the customer,
-           * you can provide payment_method_configuration.card.store_payment_details: "enabled" instead.
+           * Set this paremeter to "enabled" if you collect consent from the customer yourself
+           * If you want Checkout to collect consent from the customer, set this parameter to "collect_consent"
            */
-          store_payment_details: "collect_consent",
+          store_payment_details: "enabled",
         },
         ...(customerId && {
           stored_card: {
