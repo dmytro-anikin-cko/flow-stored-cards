@@ -8,16 +8,28 @@ const randomBtn = document.getElementById("random-btn");
 const createFlowBtn = document.getElementById("create-flow-btn");
 const customersSection = document.getElementById("customers-section");
 const customersList = document.getElementById("customers-list");
+const captureCvvToggle = document.getElementById("capture-cvv-toggle");
 
 let selectedCustomerId = null;
 
-let componentOptions = {
-  card: {
-    data: {
-      cardholderName: "Dmytro Anikin",
+const getComponentOptions = () => {
+  const options = {
+    card: {
+      data: {
+        cardholderName: "Dmytro Anikin",
+      },
+      displayCardholderName: "top",
     },
-    displayCardholderName: "top",
-  },
+  };
+  
+  // Add stored_card options if CVV capture is enabled
+  if (captureCvvToggle.checked) {
+    options.stored_card = {
+      captureCardCvv: true,
+    };
+  }
+  
+  return options;
 };
 
 // Load and display customers on page load
@@ -205,6 +217,9 @@ const initFlow = async () => {
     alert("Payment session not ready yet. Please wait...");
     return;
   }
+
+  const componentOptions = getComponentOptions();
+  console.log('Initializing Flow with componentOptions:', componentOptions);
 
   let checkout = await CheckoutWebComponents({
     publicKey: "pk_sbox_guri7tp655hvceb3qaglozm7gee",
